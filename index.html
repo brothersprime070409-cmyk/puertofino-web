@@ -7,24 +7,23 @@
 <meta name="description" content="Puerto Fino: mariscos frescos en Tuxtla Gutiérrez. Menú del mar, paquetes para compartir y entrega a domicilio.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Rye&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Rye&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-2SKPHYDHVP"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-2SKPHYDHVP');
-</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <style>
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
   --bg:#0B2024;--surface:#123038;--ink:#F2EAD9;--muted:#9FB3AE;--line:rgba(242,234,217,.14);
   --coral:#C1402B;--sand:#D8B872;--navbg:#06141A;--head:"Rye",Georgia,serif;--body:"Inter",system-ui,sans-serif;}
 *{box-sizing:border-box;}
 html{background:var(--bg);}
-body{margin:0;background:radial-gradient(120% 60% at 50% 0%,#153842,var(--bg) 60%);color:var(--ink);font-family:var(--body);line-height:1.55;}
+body{margin:0;background:transparent;color:var(--ink);font-family:var(--body);line-height:1.55;position:relative;}
+
+.sea-bg{position:fixed;inset:0;z-index:-1;overflow:hidden;background:radial-gradient(120% 60% at 50% 0%,#153842,var(--bg) 60%);}
+.sea-bg .wave{position:absolute;left:0;width:200%;height:46vh;}
+.sea-bg .wave1{bottom:-4vh;opacity:.55;animation:waveMove 20s linear infinite;}
+.sea-bg .wave2{bottom:-8vh;opacity:.35;animation:waveMove 32s linear infinite reverse;}
+@keyframes waveMove{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+@media(prefers-reduced-motion:reduce){.sea-bg .wave{animation:none;}}
 .wrap{max-width:980px;margin:0 auto;padding:0 24px;}
 a{color:inherit;}
 h1,h2,h3{font-family:var(--head);font-weight:400;letter-spacing:.01em;}
@@ -105,6 +104,11 @@ footer{padding:24px 0;text-align:center;color:var(--muted);font-size:.85rem;}
 </style>
 </head>
 <body>
+
+<div class="sea-bg" id="seaBg">
+  <svg class="wave wave1" viewBox="0 0 2000 100" preserveAspectRatio="none"><path d="M0,50 C150,90 350,10 500,50 C650,90 850,10 1000,50 C1150,90 1350,10 1500,50 C1650,90 1850,10 2000,50 L2000,100 L0,100 Z" fill="rgba(31,79,74,.6)"/></svg>
+  <svg class="wave wave2" viewBox="0 0 2000 100" preserveAspectRatio="none"><path d="M0,55 C180,15 320,95 500,55 C680,15 820,95 1000,55 C1180,15 1320,95 1500,55 C1680,15 1820,95 2000,55 L2000,100 L0,100 Z" fill="rgba(8,26,30,.7)"/></svg>
+</div>
 
 <nav class="menu-nav"><div class="wrap">
   <a href="#menu">Menú</a><a href="#paquetes">Paquetes</a><a href="#pedido">Ordenar</a>
@@ -238,6 +242,17 @@ footer{padding:24px 0;text-align:center;color:var(--muted);font-size:.85rem;}
 <footer>Puerto Fino &copy; 2026</footer>
 
 <script>
+if(matchMedia("(prefers-reduced-motion: reduce)").matches){
+  // sin parallax si el usuario prefiere menos movimiento
+} else {
+  gsap.registerPlugin(ScrollTrigger);
+  gsap.to("#seaBg", {
+    yPercent: 14,
+    ease: "none",
+    scrollTrigger: { trigger: document.body, start: "top top", end: "bottom bottom", scrub: true }
+  });
+}
+
 var sbClient = window.supabase.createClient(
   "https://tafmcnrauwvvbhvwnjlz.supabase.co",
   "sb_publishable_Vg2fBaHwJ9qfIyRc92DI6w_xHWTeKCd"
